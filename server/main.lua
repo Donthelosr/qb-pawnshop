@@ -32,9 +32,9 @@ RegisterNetEvent('qb-pawnshop:server:sellPawnItems', function(itemName, itemAmou
     if dist > 5 then exploitBan(src, 'sellPawnItems Exploiting') return end
     if Player.Functions.RemoveItem(itemName, tonumber(itemAmount)) then
         if Config.BankMoney then
-            Player.Functions.AddMoney('bank', totalPrice)
+            Player.Functions.AddMoney('bank', totalPrice, 'pawnshop')
         else
-            Player.Functions.AddMoney('cash', totalPrice)
+            Player.Functions.AddMoney('cash', totalPrice, 'pawnshop')
         end
         TriggerClientEvent('QBCore:Notify', src, Lang:t('success.sold', { value = tonumber(itemAmount), value2 = QBCore.Shared.Items[itemName].label, value3 = totalPrice }),'success')
         TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[itemName], 'remove')
@@ -78,7 +78,8 @@ RegisterNetEvent('qb-pawnshop:server:pickupMelted', function(item)
                 TriggerClientEvent('inventory:client:ItemBox', src, QBCore.Shared.Items[m.item], 'add')
                 TriggerClientEvent('QBCore:Notify', src, Lang:t('success.items_received',{ value = (meltedAmount * rewardAmount), value2 = QBCore.Shared.Items[m.item].label }), 'success')
             else
-                TriggerClientEvent('QBCore:Notify', src, Lang:t('error.inventory_full', { value = QBCore.Shared.Items[m.item].label}), 'warning', 7500)
+                TriggerClientEvent('qb-pawnshop:client:openMenu', src)
+                return
             end
         end
     end
